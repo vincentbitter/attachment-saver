@@ -1,4 +1,5 @@
 
+using System.Runtime.InteropServices;
 using AttachmentSaver.Configuration;
 using MailKit;
 using MailKit.Net.Imap;
@@ -59,6 +60,11 @@ public class MailClient : IDisposable
             {
                 data.DecodeTo(stream, cancellationToken);
             }
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+                File.SetUnixFileMode(target,
+                    UnixFileMode.UserRead | UnixFileMode.UserWrite |
+                    UnixFileMode.GroupRead | UnixFileMode.GroupWrite |
+                    UnixFileMode.OtherRead | UnixFileMode.OtherWrite);
         }
     }
 }
